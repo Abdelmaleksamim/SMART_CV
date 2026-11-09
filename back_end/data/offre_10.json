@@ -1,0 +1,37 @@
+{
+  "offre_id": 10,
+  "mis_a_jour": "2026-11-06T18:28:04.802668+00:00",
+  "total": 1,
+  "candidats": [
+    {
+      "id": 25,
+      "nom_fichier": "DEV-2026-001_Yassine_El_Amrani.pdf",
+      "nom_candidat": "Dev-2026-001 Yassine El Amrani",
+      "poste": null,
+      "profil": "Développeur Full Stack passionné et expérimenté avec 9 ans de pratique dans la conception, l'architecture et la maintenance d'applications web complexes. Expert reconnu sur les technologies Bootstrap 5, Spring Boot et l'écosystème cloud (Nginx). Très orienté vers la qualité du code, le respect des bonnes pratiques de sécurité, l'optimisation des performances de bases de données (Neo4j) et le travail collaboratif en environnement Agile/Scrum.",
+      "competences": [
+        "Frontend",
+        "Bootstrap 5",
+        "Tailwind CSS",
+        "Svelte",
+        "Next.js",
+        "Backend",
+        "Spring Boot",
+        "Django",
+        "Laravel",
+        "Bases de données",
+        "Neo4j",
+        "SQLite",
+        "MongoDB",
+        "DevOps & Cloud",
+        "Nginx",
+        "Helm",
+        "Prometheus & Grafana"
+      ],
+      "experience": "Ingénieur Etudes Et Développement Web Senior — Atlas Cloud Lab (2023 - Présent)\n• Architecture et développement d'APIs RESTful et GraphQL haute performance avec Spring Boot\net Neo4j.\n• Conception d'interfaces utilisateurs dynamiques, accessibles et responsive sous Bootstrap 5 et\nTailwind CSS.\n• Mise en place de pipelines CI/CD automatisés et conteneurisation des services via Nginx.\n• Encadrement technique de développeurs juniors et animation des revues de code\nhebdomadaires.\nIngénieur d'Études et Développement Web — Nexus Systems Morocco (2021 - 2023)\n• Développement de fonctionnalités métiers complexes en intégrant Django avec la base de\ndonnées SQLite.\n• Optimisation des temps de chargement des pages web de 40% grâce à la refonte du frontend en\nSvelte.\n• Rédaction des spécifications techniques et exécution des plans de tests unitaires et d'intégration.\nDéveloppeur Web & Mobile Junior — Nexus Systems Morocco (2019 - 2021)\n• Participation au développement d'applications SaaS interactives avec Next.js et Laravel.\n• Maintenance préventive, résolution des bugs Niveaux 2 et 3 et support technique utilisateur.",
+      "annees_experience": 7,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    }
+  ]
+}

@@ -1,5 +1,22 @@
-node_modules
-dist
+# Node.js dependencies
+node_modules/
+**/node_modules/
+
+# Build files
+dist/
+**/dist/
+
+# Environment variables
 .env
+.env.*
+!.env.example
+
 # Vite cache
-front_end/.vite/
+.vite/
+**/.vite/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
