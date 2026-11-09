@@ -1,0 +1,39 @@
+{
+  "offre_id": 3,
+  "mis_a_jour": "2026-11-04T11:59:52.807920+00:00",
+  "total": 1,
+  "candidats": [
+    {
+      "id": 7,
+      "nom_fichier": "DEV-2026-010_Lina_Guessous.pdf",
+      "nom_candidat": "Lina Guessous",
+      "poste": "DÉVELOPPEUR WEB SENIOR",
+      "profil": "Développeur Full Stack passionné et expérimenté avec 4 ans de pratique dans la conception, l'architecture et la maintenance d'applications web complexes. Expert reconnu sur les technologies Vue.js, NestJS et l'écosystème cloud (CI/CD (GitHub Actions)). Très orienté vers la qualité du code, le respect des bonnes pratiques de sécurité, l'optimisation des performances de bases de données (Firebase Firestore) et le travail collaboratif en environnement Agile/Scrum.",
+      "competences": [
+        "Frontend",
+        "Vue.js",
+        "React.js",
+        "GraphQL Client",
+        "SolidJS",
+        "Backend",
+        "NestJS",
+        "Node.js",
+        "Express",
+        "Spring Boot",
+        "Bases de données",
+        "Firebase Firestore",
+        "PostgreSQL",
+        "MongoDB",
+        "DevOps & Cloud",
+        "CI",
+        "CD (GitHub Actions)",
+        "Terraform",
+        "Ansible"
+      ],
+      "experience": "Développeur Web Senior Senior — TechSolutions Maroc (2023 - Présent)\n• Architecture et développement d'APIs RESTful et GraphQL haute performance avec NestJS et\nFirebase Firestore.\n• Conception d'interfaces utilisateurs dynamiques, accessibles et responsive sous Vue.js et\nReact.js.\n• Mise en place de pipelines CI/CD automatisés et conteneurisation des services via CI/CD (GitHub\nActions).\n• Encadrement technique de développeurs juniors et animation des revues de code\nhebdomadaires.\nIngénieur d'Études et Développement Web — Digital Pulse Studio (2021 - 2023)\n• Développement de fonctionnalités métiers complexes en intégrant Node.js / Express avec la base\nde données PostgreSQL.\n• Optimisation des temps de chargement des pages web de 40% grâce à la refonte du frontend en\nGraphQL Client.\n• Rédaction des spécifications techniques et exécution des plans de tests unitaires et d'intégration.\nDéveloppeur Web & Mobile Junior — TechSolutions Maroc (2019 - 2021)\n• Participation au développement d'applications SaaS interactives avec SolidJS et Spring Boot.\n• Maintenance préventive, résolution des bugs Niveaux 2 et 3 et support technique utilisateur.",
+      "annees_experience": 7,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    }
+  ]
+}

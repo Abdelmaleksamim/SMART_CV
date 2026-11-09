@@ -1,14 +1,16 @@
+import json
+from pathlib import Path
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.orm import Session
 
 from ..database import get_db
 from ..models import Cv, Offre
 from ..schemas import CvDetail, CvResult, CvUploadOut
-import json
 
 from ..services.cv_parser import parse_cv
 from ..services.pdf_extractor import extract_text
 from ..services.json_store import export_offre_json
+from ..services.file_storage import save_temp_pdf, verify_file_access, cleanup_temp_file
 
 router = APIRouter(prefix="/api/offres", tags=["CV"])
 
@@ -22,30 +24,57 @@ async def importer_cvs(
     files: list[UploadFile] = File(..., description="Un ou plusieurs CV au format PDF"),
     db: Session = Depends(get_db),
 ):
-    """Étape 2 : reçoit tous les PDF, extrait le texte de chacun et l'enregistre."""
+    """Importation, stockage temporaire sur disque (EN02), extraction depuis le disque et export JSON."""
     if not db.get(Offre, offre_id):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Offre introuvable.")
     if len(files) > MAX_FILES:
         raise HTTPException(status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, f"Maximum {MAX_FILES} CV par import.")
 
     resultats: list[CvResult] = []
+    
     for f in files:
-        data = await f.read()
         name = f.filename or "sans_nom.pdf"
-
-        if len(data) > MAX_SIZE:
-            resultats.append(CvResult(nom_fichier=name, taille=len(data), statut="rejete", message="Fichier supérieur à 5 Mo."))
+        
+        # 1. EN02 : Sauvegarde physique temporaire directe sur disque (avec nom unique UUID)
+        try:
+            temp_path_str = save_temp_pdf(f)
+            temp_path = Path(temp_path_str)
+        except HTTPException as he:
+            resultats.append(CvResult(nom_fichier=name, taille=0, statut="rejete", message=he.detail))
             continue
-        if not data.startswith(b"%PDF"):
-            resultats.append(CvResult(nom_fichier=name, taille=len(data), statut="rejete", message="Format non accepté (PDF uniquement)."))
+
+        # 2. EN02-T03 : Vérification de la disponibilité et de l'accès au fichier sur le disque
+        if not verify_file_access(temp_path_str):
+            cleanup_temp_file(temp_path_str)
+            resultats.append(CvResult(nom_fichier=name, taille=0, statut="rejete", message="Fichier temporaire inaccessible."))
             continue
 
-        ex = extract_text(data)
+        file_size = temp_path.stat().st_size
+
+        # 3. Validation de la taille directement depuis le fichier disque
+        if file_size > MAX_SIZE:
+            cleanup_temp_file(temp_path_str)
+            resultats.append(CvResult(nom_fichier=name, taille=file_size, statut="rejete", message="Fichier supérieur à 5 Mo."))
+            continue
+
+        # 4. Lecture du fichier depuis le disque pour analyse
+        with open(temp_path, "rb") as bf:
+            file_data = bf.read()
+
+        if not file_data.startswith(b"%PDF"):
+            cleanup_temp_file(temp_path_str)
+            resultats.append(CvResult(nom_fichier=name, taille=file_size, statut="rejete", message="Format non accepté (PDF uniquement)."))
+            continue
+
+        # 5. Extraction du texte et parsing
+        ex = extract_text(file_data)
         parsed = parse_cv(ex.texte, name) if ex.statut == "extrait" else None
+        
+        # 6. Enregistrement en base de données
         cv = Cv(
             offre_id=offre_id,
             nom_fichier=name,
-            taille=len(data),
+            taille=file_size,
             nb_pages=ex.nb_pages,
             statut=ex.statut,
             message=ex.message,
@@ -58,19 +87,38 @@ async def importer_cvs(
             niveau_etudes=parsed.niveau_etudes if parsed else None,
         )
         db.add(cv)
-        db.flush()  # obtient cv.id
+        db.flush()  # Récupération de cv.id
+        
         resultats.append(
-            CvResult(id=cv.id, nom_fichier=name, taille=len(data), nb_pages=ex.nb_pages,
-                     statut=ex.statut, message=ex.message, nb_caracteres=len(ex.texte),
-                     nom_candidat=cv.nom_candidat, poste=cv.poste)
+            CvResult(
+                id=cv.id, 
+                nom_fichier=name, 
+                taille=file_size, 
+                nb_pages=ex.nb_pages,
+                statut=ex.statut, 
+                message=ex.message, 
+                nb_caracteres=len(ex.texte),
+                nom_candidat=cv.nom_candidat, 
+                poste=cv.poste
+            )
         )
-    db.commit()
+        
+        # 7. Nettoyage du fichier temporaire du disque après traitement
+        cleanup_temp_file(temp_path_str)
 
-    export_offre_json(db, offre_id)  # réécrit data/offre_{id}.json avec tous les CV 'extrait' de l'offre
+    db.commit()
+    
+    # 8. Mise à jour de l'export JSON global de l'offre
+    export_offre_json(db, offre_id)
 
     rejetes = sum(1 for r in resultats if r.statut == "rejete")
-    return CvUploadOut(offre_id=offre_id, total=len(resultats), importes=len(resultats) - rejetes,
-                       rejetes=rejetes, resultats=resultats)
+    return CvUploadOut(
+        offre_id=offre_id, 
+        total=len(resultats), 
+        importes=len(resultats) - rejetes,
+        rejetes=rejetes, 
+        resultats=resultats
+    )
 
 
 @router.get("/{offre_id}/cvs", response_model=list[CvDetail])
