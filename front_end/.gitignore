@@ -1,3 +1,5 @@
 node_modules
 dist
 .env
+# Vite cache
+front_end/.vite/
