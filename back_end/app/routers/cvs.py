@@ -6,7 +6,8 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models import Cv, Offre
 from ..schemas import CvDetail, CvResult, CvUploadOut
-
+from typing import Annotated
+from pydantic import WithJsonSchema
 from ..services.cv_parser import parse_cv
 from ..services.pdf_extractor import extract_text
 from ..services.json_store import export_offre_json
@@ -17,11 +18,21 @@ router = APIRouter(prefix="/api/offres", tags=["CV"])
 MAX_SIZE = 5 * 1024 * 1024  # 5 Mo par fichier
 MAX_FILES = 50
 
+PDFUploadFile = Annotated[
+    UploadFile,
+    WithJsonSchema({
+        "type": "string",
+        "format": "binary"
+    })
+]
 
 @router.post("/{offre_id}/cvs", response_model=CvUploadOut, status_code=status.HTTP_201_CREATED)
 async def importer_cvs(
     offre_id: int,
-    files: list[UploadFile] = File(..., description="Un ou plusieurs CV au format PDF"),
+    files: list[PDFUploadFile] = File(
+    ...,
+    description="Un ou plusieurs CV au format PDF"
+),
     db: Session = Depends(get_db),
 ):
     """Importation, stockage temporaire sur disque (EN02), extraction depuis le disque et export JSON."""
