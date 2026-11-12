@@ -14,7 +14,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="SMART CV API", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="SMART RECRUITMENT API", version="0.1.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
