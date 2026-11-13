@@ -1,102 +1,70 @@
-import { useState } from "react";
-import { Header } from "./components/ui.jsx";
+import { useMemo, useState } from "react";
+import { Header, Logo, Button, Card, Pill } from "./components/ui.jsx";
 import JobStep from "./steps/JobStep.jsx";
 import ImportStep from "./steps/ImportStep.jsx";
 import ResultsStep from "./steps/ResultsStep.jsx";
 import { createOffre, uploadCvs } from "./lib/api.js";
 
 const EMPTY_JOB = { title: "", description: "", skills: [], experience: "2 ans", education: "Bac +3" };
-
-// Identifie un envoi : même offre + mêmes fichiers = pas besoin de renvoyer
-const uploadKey = (offreId, files) =>
-  `${offreId}|${files.map((f) => `${f.name}:${f.size}`).join(",")}`;
-
+const read = (k, d=[]) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
+const write = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+const Icon = ({ name }) => {
+ const paths = { briefcase:<><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M10 12v2h4v-2"/></>, user:<><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></>, file:<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></>, chart:<><path d="M3 3v18h18"/><path d="m7 14 4-4 4 3 6-7"/></>, shield:<><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11"/><path d="m9 12 2 2 4-4"/></> };
+ return <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{paths[name] || paths.file}</svg>;
+};
+function Field({label,...props}) { return <label className="block text-sm font-medium">{label}<input {...props} className="mt-2 w-full rounded-lg border border-line bg-white px-4 py-3 font-normal outline-none focus:border-brand"/ ></label>; }
+function Auth({ role, mode, onDone, onMode, onBack }) {
+ const [name,setName]=useState(""); const [company,setCompany]=useState(""); const [email,setEmail]=useState(""); const [password,setPassword]=useState(""); const [error,setError]=useState("");
+ const candidate=role==="candidate";
+ function submit(e){e.preventDefault(); if(!email.includes("@")||password.length<6){setError("Adresse e-mail invalide ou mot de passe trop court (6 caractères minimum).");return;}
+ const users=read("sr_users",[]); let user=users.find(x=>x.email.toLowerCase()===email.toLowerCase()&&x.role===role);
+ if(mode==="register"){if(users.some(x=>x.email.toLowerCase()===email.toLowerCase()&&x.role===role)){setError("Ce compte existe déjà.");return;} user={id:Date.now(),name,email,company,role};write("sr_users",[...users,user]);}
+ else if(!user){setError("Compte introuvable. Créez un compte pour continuer.");return;}
+ write("sr_session",user);onDone(user);
+ }
+ return <main className="mx-auto max-w-lg px-6 py-12"><button onClick={onBack} className="mb-7 text-sm text-muted">← Retour à l’accueil</button><Card><div className="mb-6"><Pill>{candidate?"Portail Candidat":"Espace Recruteur"}</Pill><h1 className="mt-4 text-2xl font-semibold">{mode==="login"?"Heureux de vous revoir":"Créer votre compte"}</h1><p className="mt-2 text-sm text-muted">{mode==="login"?"Connectez-vous à votre espace sécurisé.":"Rejoignez SMART RECRUITMENT."}</p></div><form className="space-y-4" onSubmit={submit}>{mode==="register"&&<><Field label="Nom complet" value={name} onChange={e=>setName(e.target.value)} required placeholder="Votre nom"/>{!candidate&&<Field label="Entreprise" value={company} onChange={e=>setCompany(e.target.value)} required placeholder="Nom de l’entreprise"/>}</>}<Field label="Adresse e-mail" type="email" value={email} onChange={e=>setEmail(e.target.value)} required placeholder="nom@exemple.com"/><Field label="Mot de passe" type="password" value={password} onChange={e=>setPassword(e.target.value)} required placeholder="6 caractères minimum"/>{error&&<p role="alert" className="text-sm text-red-600">{error}</p>}<Button type="submit" className="w-full">{mode==="login"?"Se connecter":"Créer mon compte"} →</Button></form><p className="mt-6 text-center text-sm text-muted">{mode==="login"?"Pas encore de compte ?":"Vous avez déjà un compte ?"} <button className="font-medium text-brand" onClick={()=>onMode(mode==="login"?"register":"login")}>{mode==="login"?"S’inscrire":"Se connecter"}</button></p><p className="mt-5 text-xs text-muted">Prototype : authentification de démonstration stockée localement. À connecter à une authentification backend avant mise en production.</p></Card></main>;
+}
+function Home({go}) {return <main className="mx-auto max-w-6xl px-6 py-14"><div className="max-w-3xl"><Pill>La rencontre entre talents et opportunités</Pill><h1 className="mt-6 text-4xl font-semibold leading-tight sm:text-5xl">Le recrutement devient <span className="text-brand">plus intelligent.</span></h1><p className="mt-5 max-w-2xl text-base leading-7 text-muted">Une plateforme unique pour publier des offres, découvrir des talents et faire correspondre les compétences aux bons postes.</p></div><div className="mt-12 grid gap-6 md:grid-cols-2">{[{id:"recruiter",title:"Espace Recruteur",desc:"Publiez vos offres, gérez vos candidatures et identifiez les meilleurs profils grâce au matching intelligent.",icon:"briefcase",tag:"Pilotez vos recrutements",action:"Accéder à l’espace recruteur"},{id:"candidate",title:"Portail Candidat",desc:"Créez votre profil, explorez les opportunités et postulez en quelques étapes avec votre CV PDF.",icon:"user",tag:"Donnez de l’élan à votre carrière",action:"Accéder au portail candidat"}].map(x=><button key={x.id} onClick={()=>go(x.id)} className="group rounded-2xl border border-line bg-white p-8 text-left transition hover:-translate-y-1 hover:border-brand hover:shadow-xl"><div className="flex items-center justify-between"><span className="grid h-14 w-14 place-items-center rounded-2xl bg-brand-soft text-brand"><Icon name={x.icon}/></span><span className="text-brand transition group-hover:translate-x-1">↗</span></div><p className="mt-7 text-xs font-semibold uppercase tracking-wider text-brand">{x.tag}</p><h2 className="mt-2 text-2xl font-semibold">{x.title}</h2><p className="mt-3 min-h-14 text-sm leading-6 text-muted">{x.desc}</p><span className="mt-7 inline-flex rounded-lg bg-ink px-5 py-3 text-sm font-medium text-white">{x.action} →</span></button>)}</div><div className="mt-12 grid gap-4 rounded-2xl bg-brand-soft p-7 sm:grid-cols-3">{[["01","Publier","Des offres structurées et accessibles"],["02","Postuler","Un parcours candidat simple"],["03","Matcher","Un classement lisible des profils"]].map(x=><div key={x[0]}><span className="text-xs font-semibold text-brand">{x[0]}</span><h3 className="mt-2 font-semibold">{x[1]}</h3><p className="mt-1 text-sm text-muted">{x[2]}</p></div>)}</div></main>}
+function Workspace({user,onLogout,offers,setOffers,onLaunchWizard}) {
+ const [tab,setTab]=useState("overview"); const [editing,setEditing]=useState(null); const [form,setForm]=useState({title:"",description:"",skills:"",experience:"2 ans",education:"Bac +3"}); const [notice,setNotice]=useState("");
+ const applications=read("sr_applications",[]);
+ const owned=offers.filter(o=>o.owner===user.email);
+ function save(e){e.preventDefault();if(!form.title.trim()||!form.description.trim())return;const next={...form,id:editing||Date.now(),skills:form.skills.split(",").map(s=>s.trim()).filter(Boolean),owner:user.email,createdAt:new Date().toISOString()};setOffers(old=>{const n=editing?old.map(o=>o.id===editing?next:o):[next,...old];write("sr_offers",n);return n;});setEditing(null);setForm({title:"",description:"",skills:"",experience:"2 ans",education:"Bac +3"});setTab("offers");setNotice("Offre enregistrée.");}
+ function edit(o){setEditing(o.id);setForm({...o,skills:o.skills.join(", ")});setTab("create");}
+ function remove(id){if(confirm("Supprimer cette offre ?"))setOffers(old=>{const n=old.filter(o=>o.id!==id);write("sr_offers",n);return n;});}
+ return <div className="mx-auto grid max-w-7xl gap-7 px-5 py-8 lg:grid-cols-[230px_1fr]"><aside className="rounded-2xl border border-line bg-white p-5"><p className="text-xs uppercase tracking-wider text-muted">Recruteur</p><h2 className="mt-2 font-semibold">{user.company||user.name}</h2><nav className="mt-7 space-y-1">{[["overview","Vue d’ensemble"],["offers","Mes offres"],["candidates","Candidats"],["create","Créer une offre"],["matching","Matching CV"]].map(([id,label])=><button key={id} onClick={()=>setTab(id)} className={`w-full rounded-lg px-3 py-2.5 text-left text-sm ${tab===id?"bg-brand-soft font-semibold text-brand":"text-muted hover:bg-page"}`}>{label}</button>)}</nav><button onClick={onLogout} className="mt-8 w-full border-t border-line pt-4 text-left text-sm text-muted">Déconnexion ↗</button></aside><section className="min-w-0"><div className="mb-7 flex flex-wrap items-center justify-between gap-3"><div><p className="text-sm text-muted">Bonjour, {user.name||user.company}</p><h1 className="mt-1 text-2xl font-semibold">{({overview:"Tableau de bord",offers:"Mes offres d’emploi",candidates:"Candidats",create:editing?"Modifier l’offre":"Nouvelle offre",matching:"Matching intelligent"})[tab]}</h1></div><Button onClick={()=>{setEditing(null);setForm({title:"",description:"",skills:"",experience:"2 ans",education:"Bac +3"});setTab("create")}}>＋ Nouvelle offre</Button></div>{notice&&<p className="mb-4 rounded-lg bg-brand-soft p-3 text-sm text-brand">{notice}</p>}
+ {tab==="overview"&&<><div className="grid gap-4 sm:grid-cols-3">{[["Offres actives",owned.length],["Candidatures reçues",applications.filter(a=>owned.some(o=>o.id===a.offerId)).length],["Profils à examiner",applications.filter(a=>owned.some(o=>o.id===a.offerId)).length]].map(x=><Card key={x[0]}><p className="text-sm text-muted">{x[0]}</p><p className="mt-3 text-3xl font-semibold">{x[1]}</p></Card>)}</div><Card><h3 className="font-semibold">Démarrer un recrutement</h3><p className="mt-2 text-sm text-muted">Créez une offre, recevez des candidatures et analysez les CV.</p><Button className="mt-5" onClick={()=>setTab("create")}>Créer ma première offre →</Button></Card></>}
+ {tab==="create"&&<Card><form onSubmit={save} className="space-y-4"><Field label="Intitulé du poste" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} required placeholder="Ex. Développeur Full Stack"/><label className="block text-sm font-medium">Description<textarea required rows="4" value={form.description} onChange={e=>setForm({...form,description:e.target.value})} className="mt-2 w-full rounded-lg border border-line p-3 font-normal"/></label><Field label="Compétences (séparées par des virgules)" value={form.skills} onChange={e=>setForm({...form,skills:e.target.value})} placeholder="React, Python, SQL"/><div className="grid gap-4 sm:grid-cols-2"><label className="text-sm font-medium">Expérience<select value={form.experience} onChange={e=>setForm({...form,experience:e.target.value})} className="mt-2 w-full rounded-lg border border-line p-3"><option>Débutant</option><option>1 an</option><option>2 ans</option><option>3 ans</option><option>5 ans</option><option>8 ans et plus</option></select></label><label className="text-sm font-medium">Niveau d’études<select value={form.education} onChange={e=>setForm({...form,education:e.target.value})} className="mt-2 w-full rounded-lg border border-line p-3"><option>Bac</option><option>Bac +2</option><option>Bac +3</option><option>Bac +5</option><option>Doctorat</option></select></label></div><div className="flex gap-3"><Button type="submit">{editing?"Enregistrer les modifications":"Publier l’offre"}</Button><Button type="button" variant="secondary" onClick={()=>setTab("offers")}>Annuler</Button></div></form></Card>}
+ {tab==="offers"&&<Card><div className="mb-4 flex justify-between"><h3 className="font-semibold">Offres publiées</h3><Pill>{owned.length} offre(s)</Pill></div>{owned.length===0?<p className="text-sm text-muted">Aucune offre publiée pour le moment.</p>:<div className="space-y-3">{owned.map(o=><div key={o.id} className="flex flex-wrap items-center gap-3 rounded-xl border border-line p-4"><div className="min-w-0 flex-1"><p className="font-medium">{o.title}</p><p className="mt-1 text-xs text-muted">{o.skills.join(" · ")||"Compétences non précisées"}</p></div><Pill>Publiée</Pill><button onClick={()=>edit(o)} className="text-sm text-brand">Modifier</button><button onClick={()=>remove(o.id)} className="text-sm text-red-600">Supprimer</button></div>)}</div>}</Card>}
+ {tab==="candidates"&&<Card><h3 className="mb-4 font-semibold">Candidatures reçues</h3>{applications.filter(a=>owned.some(o=>o.id===a.offerId)).length===0?<p className="text-sm text-muted">Aucune candidature reçue. Vos offres seront visibles dans le Portail Candidat.</p>:applications.filter(a=>owned.some(o=>o.id===a.offerId)).map(a=><div key={a.id} className="border-b border-line py-4"><p className="font-medium">{a.candidateName}</p><p className="text-sm text-muted">{a.offerTitle} · {a.email}</p><p className="text-xs text-muted">{a.cvName}</p></div>)}</Card>}
+ {tab==="matching"&&<Card><h3 className="font-semibold">Analyse et matching CV</h3><p className="mt-2 text-sm text-muted">Conservez le moteur d’analyse existant : création de poste, import PDF et classement des profils selon leur compatibilité.</p><Button className="mt-5" onClick={onLaunchWizard}>Ouvrir le parcours d’analyse →</Button><p className="mt-4 text-xs text-muted">Le moteur actuel fonctionne via l’API FastAPI. Le nouveau module de candidatures portail est une interface de démonstration tant que ses endpoints dédiés ne sont pas branchés.</p></Card>}</section></div>;
+}
+function CandidatePortal({user,onLogout,offers}) {
+ const [tab,setTab]=useState("offers"); const [profile,setProfile]=useState(()=>read("sr_profile_"+user.email,{phone:"",city:"",education:"",headline:""})); const [selected,setSelected]=useState(""); const [cv,setCv]=useState(null); const [msg,setMsg]=useState("");
+ const applications=read("sr_applications",[]);
+ const mine=applications.filter(a=>a.email===user.email);
+ function saveProfile(e){e.preventDefault();write("sr_profile_"+user.email,profile);setMsg("Profil enregistré.");}
+ function apply(e){e.preventDefault();const offer=offers.find(o=>String(o.id)===String(selected));if(!offer||!cv)return;const all=read("sr_applications",[]);all.unshift({id:Date.now(),offerId:offer.id,offerTitle:offer.title,candidateName:user.name,email:user.email,cvName:cv.name,submittedAt:new Date().toISOString()});write("sr_applications",all);setMsg("Votre candidature a été enregistrée.");setCv(null);setTab("applications");}
+ return <div className="mx-auto grid max-w-7xl gap-7 px-5 py-8 lg:grid-cols-[230px_1fr]"><aside className="rounded-2xl border border-line bg-white p-5"><p className="text-xs uppercase tracking-wider text-muted">Candidat</p><h2 className="mt-2 font-semibold">{user.name}</h2><nav className="mt-7 space-y-1">{[["offers","Offres disponibles"],["profile","Mon profil"],["applications","Mes candidatures"]].map(([id,label])=><button key={id} onClick={()=>setTab(id)} className={`w-full rounded-lg px-3 py-2.5 text-left text-sm ${tab===id?"bg-brand-soft font-semibold text-brand":"text-muted hover:bg-page"}`}>{label}</button>)}</nav><button onClick={onLogout} className="mt-8 w-full border-t border-line pt-4 text-left text-sm text-muted">Déconnexion ↗</button></aside><section><div className="mb-7"><p className="text-sm text-muted">Bienvenue sur votre espace</p><h1 className="mt-1 text-2xl font-semibold">{tab==="offers"?"Explorez les opportunités":tab==="profile"?"Mon profil candidat":"Mes candidatures"}</h1></div>{msg&&<p className="mb-4 rounded-lg bg-brand-soft p-3 text-sm text-brand">{msg}</p>}
+ {tab==="offers"&&<div className="space-y-4">{offers.length===0?<Card><p className="text-sm text-muted">Aucune offre publiée pour le moment. Revenez bientôt.</p></Card>:offers.map(o=><Card key={o.id}><div className="flex flex-wrap items-start justify-between gap-3"><div><Pill>Offre ouverte</Pill><h3 className="mt-3 text-lg font-semibold">{o.title}</h3><p className="mt-1 text-sm text-muted">{o.owner}</p></div><Button onClick={()=>{setSelected(String(o.id));setTab("apply");}}>Postuler →</Button></div><p className="mt-4 text-sm leading-6 text-muted">{o.description}</p><div className="mt-4 flex flex-wrap gap-2">{o.skills.map(s=><Pill key={s}>{s}</Pill>)}</div><p className="mt-4 text-xs text-muted">{o.experience} d’expérience · {o.education}</p></Card>)}</div>}
+ {tab==="profile"&&<Card><form onSubmit={saveProfile} className="space-y-4"><Field label="Nom complet" value={user.name} disabled/><Field label="E-mail" value={user.email} disabled/><Field label="Téléphone" value={profile.phone} onChange={e=>setProfile({...profile,phone:e.target.value})} placeholder="+212 ..."/><Field label="Ville" value={profile.city} onChange={e=>setProfile({...profile,city:e.target.value})} placeholder="Casablanca"/><Field label="Intitulé du profil" value={profile.headline} onChange={e=>setProfile({...profile,headline:e.target.value})} placeholder="Développeur Full Stack"/><Field label="Niveau d’études" value={profile.education} onChange={e=>setProfile({...profile,education:e.target.value})} placeholder="Bac +5"/><Button type="submit">Enregistrer mon profil</Button></form></Card>}
+ {tab==="apply"&&<Card><h3 className="font-semibold">Déposer ma candidature</h3><p className="mt-2 text-sm text-muted">Offre : {offers.find(o=>String(o.id)===selected)?.title}</p><form onSubmit={apply} className="mt-5 space-y-4"><label className="block text-sm font-medium">CV au format PDF<input type="file" accept="application/pdf,.pdf" required onChange={e=>setCv(e.target.files?.[0]||null)} className="mt-2 block w-full rounded-lg border border-line p-3 text-sm"/></label>{cv&&<p className="text-xs text-muted">Document sélectionné : {cv.name}</p>}<p className="text-xs text-muted">Prototype : le fichier est sélectionné dans le navigateur, mais son stockage sécurisé et son transfert vers le recruteur nécessitent l’API de candidature.</p><div className="flex gap-3"><Button type="submit" disabled={!cv}>Envoyer ma candidature →</Button><Button type="button" variant="secondary" onClick={()=>setTab("offers")}>Retour</Button></div></form></Card>}
+ {tab==="applications"&&<Card><h3 className="mb-4 font-semibold">Historique des candidatures</h3>{mine.length===0?<p className="text-sm text-muted">Vous n’avez pas encore postulé.</p>:mine.map(a=><div key={a.id} className="flex items-center justify-between border-b border-line py-4"><div><p className="font-medium">{a.offerTitle}</p><p className="text-xs text-muted">{a.cvName}</p></div><Pill>Reçue</Pill></div>)}</Card>}</section></div>;
+}
 export default function App() {
-  const [step, setStep] = useState(1);
-  const [job, setJob] = useState(EMPTY_JOB);
-  const [saved, setSaved] = useState(false);
-  const [files, setFiles] = useState([]);
-
-  const [offreId, setOffreId] = useState(null);
-  const [uploadResult, setUploadResult] = useState(null);
-  const [lastUploadKey, setLastUploadKey] = useState(null);
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  // Étape 1 → 2 : POST /api/offres
-  const saveJob = async (j) => {
-    if (loading) return;
-    setLoading(true);
-    setError("");
-    try {
-      const offre = await createOffre(j);
-      setJob(j);
-      setOffreId(offre.id);
-      setSaved(true);
-      setLastUploadKey(null); // nouvelle offre : les CV devront être renvoyés
-      setUploadResult(null);
-      setStep(2);
-    } catch (err) {
-      setError(err.message || "Impossible d’enregistrer l’offre. Vérifiez que le serveur est lancé.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Étape 2 → 3 : POST /api/offres/{id}/cvs
-  const sendCvs = async () => {
-    if (loading) return;
-    const key = uploadKey(offreId, files);
-    if (key === lastUploadKey) { // déjà envoyés : on évite les doublons en base
-      setStep(3);
-      return;
-    }
-    setLoading(true);
-    setError("");
-    try {
-      const res = await uploadCvs(offreId, files);
-      setUploadResult(res);
-      setLastUploadKey(key);
-      setStep(3);
-    } catch (err) {
-      setError(err.message || "Impossible d’envoyer les CV. Vérifiez que le serveur est lancé.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const goTo = (n) => { setError(""); setStep(n); };
-
-  return (
-    <>
-      <Header step={step} />
-      <main className="mx-auto max-w-6xl px-6 py-10">
-        {error && (
-          <p role="alert" className="mb-6 rounded-lg bg-red-50 p-3 text-sm text-red-700">
-            {error}
-          </p>
-        )}
-        {loading && (
-          <p role="status" className="mb-6 rounded-lg bg-brand-soft p-3 text-sm text-brand">
-            {step === 1 ? "Enregistrement de l’offre…" : "Envoi et lecture des CV…"}
-          </p>
-        )}
-
-        {step === 1 && <JobStep job={job} saved={saved} onSave={saveJob} />}
-        {step === 2 && (
-          <ImportStep files={files} setFiles={setFiles} onBack={() => goTo(1)} onNext={sendCvs} />
-        )}
-        {step === 3 && (
-          <ResultsStep
-            job={job}
-            files={files}
-            offreId={offreId}
-            uploadResult={uploadResult}
-            onBack={() => goTo(2)}
-          />
-        )}
-      </main>
-    </>
-  );
+ const [route,setRoute]=useState("home"); const [authMode,setAuthMode]=useState("login"); const [session,setSession]=useState(()=>read("sr_session",null)); const [offers,setOffersState]=useState(()=>read("sr_offers",[]));
+ const [step,setStep]=useState(1);const [job,setJob]=useState(EMPTY_JOB);const [saved,setSaved]=useState(false);const [files,setFiles]=useState([]);const [offreId,setOffreId]=useState(null);const [uploadResult,setUploadResult]=useState(null);const [lastUploadKey,setLastUploadKey]=useState(null);const [loading,setLoading]=useState(false);const [error,setError]=useState("");
+ const setOffers=(fn)=>setOffersState(fn);
+ const startAuth=(r,m="login")=>{setRoute(r+"_auth");setAuthMode(m);};
+ const logout=()=>{localStorage.removeItem("sr_session");setSession(null);setRoute("home");};
+ const saveJob=async j=>{setLoading(true);setError("");try{const o=await createOffre(j);setJob(j);setOffreId(o.id);setSaved(true);setLastUploadKey(null);setUploadResult(null);setStep(2);}catch(e){setError(e.message||"Impossible d’enregistrer l’offre.");}finally{setLoading(false);}};
+ const sendCvs=async()=>{const key=`${offreId}|${files.map(f=>`${f.name}:${f.size}`).join(",")}`;if(key===lastUploadKey){setStep(3);return;}setLoading(true);try{const r=await uploadCvs(offreId,files);setUploadResult(r);setLastUploadKey(key);setStep(3);}catch(e){setError(e.message||"Échec de l’envoi des CV.");}finally{setLoading(false);}};
+ const wizard=route==="wizard";
+ return <><header className="border-b border-line bg-white"><div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4"><button onClick={()=>setRoute("home")}><Logo/></button><div className="flex items-center gap-3">{session?<><span className="hidden text-sm text-muted sm:block">{session.name}</span><button className="text-sm text-brand" onClick={logout}>Déconnexion</button></>:<button className="text-sm text-brand" onClick={()=>setRoute("home")}>Accueil</button>}</div></div></header>{error&&<p role="alert" className="mx-auto mt-4 max-w-6xl rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}{loading&&<p className="mx-auto mt-4 max-w-6xl rounded-lg bg-brand-soft p-3 text-sm text-brand">Traitement en cours…</p>}
+ {route==="home"&&<Home go={r=>session?.role===r?(setRoute(r),null):startAuth(r)}/>}
+ {(route==="recruiter_auth"||route==="candidate_auth")&&<Auth role={route==="candidate_auth"?"candidate":"recruiter"} mode={authMode} onMode={setAuthMode} onBack={()=>setRoute("home")} onDone={u=>{setSession(u);setRoute(u.role==="candidate"?"candidate":"recruiter");}}/>}
+ {route==="recruiter"&&session?.role==="recruiter"&&<Workspace user={session} onLogout={logout} offers={offers} setOffers={setOffers} onLaunchWizard={()=>{setStep(1);setRoute("wizard");}}/>}
+ {route==="candidate"&&session?.role==="candidate"&&<CandidatePortal user={session} onLogout={logout} offers={offers}/>}
+ {wizard&&<main className="mx-auto max-w-6xl px-6 py-10"><div className="mb-6 flex items-center justify-between"><button className="text-sm text-brand" onClick={()=>setRoute("recruiter")}>← Retour à l’espace recruteur</button><Pill>Matching CV existant</Pill></div>{step===1&&<JobStep job={job} saved={saved} onSave={saveJob}/>}{step===2&&<ImportStep files={files} setFiles={setFiles} onBack={()=>setStep(1)} onNext={sendCvs}/>}{step===3&&<ResultsStep job={job} files={files} offreId={offreId} uploadResult={uploadResult} onBack={()=>setStep(2)}/>}</main>}
+ <footer className="mt-12 border-t border-line bg-white"><div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-6 text-xs text-muted"><span>© 2026 SMART RECRUITMENT</span><span>Recruter mieux. Connecter les talents.</span></div></footer></>;
 }

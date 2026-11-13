@@ -1,6 +1,6 @@
-# SMART CV — Backend (FastAPI + SQLite)
+# SMART RECRUITMENT — Backend (FastAPI + SQLite)
 
-Backend de l'application **SMART CV**, développé avec FastAPI et SQLite.
+Backend de l'application **SMART RECRUITMENT**, développé avec FastAPI et SQLite.
 
 Il permet d'enregistrer des offres d'emploi, de recevoir plusieurs CV au format PDF, d'extraire leur contenu textuel et de stocker les résultats dans une base de données SQLite.
 
