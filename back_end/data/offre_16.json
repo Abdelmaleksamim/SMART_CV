@@ -1,0 +1,79 @@
+{
+  "offre_id": 16,
+  "mis_a_jour": "2026-11-19T11:46:52.003611+00:00",
+  "total": 6,
+  "candidats": [
+    {
+      "id": 41,
+      "nom_fichier": "DEV-2026-007_Sofia_Mansouri.pdf",
+      "nom_candidat": "Sofia Mansouri",
+      "poste": null,
+      "profil": null,
+      "competences": [],
+      "experience": null,
+      "annees_experience": 10,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    },
+    {
+      "id": 42,
+      "nom_fichier": "DEV-2026-008_Karim_Berrada.pdf",
+      "nom_candidat": "Karim Berrada",
+      "poste": null,
+      "profil": null,
+      "competences": [],
+      "experience": null,
+      "annees_experience": 9,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    },
+    {
+      "id": 43,
+      "nom_fichier": "DEV-2026-009_Nadia_Kabbaj.pdf",
+      "nom_candidat": "Nadia Kabbaj",
+      "poste": null,
+      "profil": null,
+      "competences": [],
+      "experience": null,
+      "annees_experience": 11,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    },
+    {
+      "id": 44,
+      "nom_fichier": "DEV-2026-010_Lina_Guessous.pdf",
+      "nom_candidat": "Lina Guessous",
+      "poste": null,
+      "profil": "github.com/lina-guessous Développeur Full Stack passionné et expérimenté avec 4 ans de pratique dans la conception,            ID Candidat: DEV-2026-010 l'architecture et la maintenance d'applications web complexes. Expert reconnu sur les technologies        Disponibilité: Immédiate Vue.js, NestJS et l'écosystème cloud (CI/CD (GitHub Actions)). Très orienté vers la qualité du code,       Mobilité: Nationale & Int. le respect des bonnes pratiques de sécurité, l'optimisation des performances de bases de données (Firebase Firestore) et le travail collaboratif en environnement Agile/Scrum.                 COMPÉTENCES Frontend EXPÉRIENCE PROFESSIONNELLE                                                                            • Vue.js, React.js, GraphQL Client, SolidJS Développeur Web Senior Senior — TechSolutions Maroc (2023 - Présent)                                                                               Backend • Architecture et développement d'APIs RESTful et GraphQL haute performance avec NestJS et           • NestJS, Node.js / Express, Spring Boot Firebase Firestore.                                                                 Bases de données • Conception d'interfaces utilisateurs dynamiques, accessibles et responsive sous Vue.js et                  • Firebase Firestore, PostgreSQL, MongoDB React.js.                                                                    DevOps & Cloud • Mise en place de pipelines CI/CD automatisés et conteneurisation des services via CI/CD (GitHub       • CI/CD (GitHub Actions), Terraform, Ansible Actions). • Encadrement technique de développeurs juniors et animation des revues de code            LANGUES hebdomadaires. • Arabe: Langue maternelle Ingénieur d'Études et Développement Web — Digital Pulse Studio (2021 - 2023)                              • Français: Langue maternelle • Développement de fonctionnalités métiers complexes en intégrant Node.js / Express avec la base        • Anglais: Intermédiaire (B2) de données PostgreSQL. QUALITÉS  • Optimisation des temps de chargement des pages web de 40% grâce à la refonte du frontend en GraphQL Client.                                                                                                                • Veille technologique & apprentissage • Rédaction des spécifications techniques et exécution des plans de tests unitaires et d'intégration.      continu • Esprit d'équipe & collaboration agileDéveloppeur Web & Mobile Junior — TechSolutions Maroc (2019 - 2021) • Gestion du temps & respect strict des • Participation au développement d'applications SaaS interactives avec SolidJS et Spring Boot.                                                                                                             délais • Maintenance préventive, résolution des bugs Niveaux 2 et 3 et support technique utilisateur.               • Excellente capacité d'adaptation",
+      "competences": [],
+      "experience": null,
+      "annees_experience": 10,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    },
+    {
+      "id": 45,
+      "nom_fichier": "DEV-2026-014_Anas_Zahraoui.pdf",
+      "nom_candidat": "Anas Zahraoui",
+      "poste": null,
+      "profil": "github.com/anas-zahraoui Développeur Full Stack passionné et expérimenté avec 4 ans de pratique dans la conception,            ID Candidat: DEV-2026-014 l'architecture et la maintenance d'applications web complexes. Expert reconnu sur les technologies        Disponibilité: Immédiate TypeScript, NestJS et l'écosystème cloud (Terraform). Très orienté vers la qualité du code, le respect     Mobilité: Nationale & Int. des bonnes pratiques de sécurité, l'optimisation des performances de bases de données (Elasticsearch) et le travail collaboratif en environnement Agile/Scrum.                   COMPÉTENCES Frontend EXPÉRIENCE PROFESSIONNELLE                                                                            • TypeScript, Astro, Webpack & Vite, SolidJS Full Stack Software Engineer Senior — OmniTech Cloud (2023 - Présent)                                                                               Backend • Architecture et développement d'APIs RESTful et GraphQL haute performance avec NestJS et           • NestJS, Node.js / Express, FastAPI Elasticsearch.                                                                    Bases de données • Conception d'interfaces utilisateurs dynamiques, accessibles et responsive sous TypeScript et            • Elasticsearch, Neo4j, MySQL Astro.                                                                      DevOps & Cloud • Mise en place de pipelines CI/CD automatisés et conteneurisation des services via Terraform.            • Terraform, CI/CD (GitHub Actions), Helm • Encadrement technique de développeurs juniors et animation des revues de code hebdomadaires.                                               LANGUES Ingénieur d'Études et Développement Web — InnoSoft Engineering (2021 - 2023)                            • Arabe: Langue maternelle • Développement de fonctionnalités métiers complexes en intégrant Node.js / Express avec la base        • Français: Langue maternelle de données Neo4j.                                                                                                             • Anglais: Intermédiaire (B2) • Optimisation des temps de chargement des pages web de 40% grâce à la refonte du frontend en QUALITÉS Webpack & Vite. • Rédaction des spécifications techniques et exécution des plans de tests unitaires et d'intégration.        • Excellente capacité d'adaptation • Veille technologique & apprentissageDéveloppeur Web & Mobile Junior — Atlas Cloud Lab (2019 - 2021) continu • Participation au développement d'applications SaaS interactives avec SolidJS et FastAPI.                                                                                                                                       • Résolution méthodique de problèmes • Maintenance préventive, résolution des bugs Niveaux 2 et 3 et support technique utilisateur.          complexes • Autonomie & proactivité constante",
+      "competences": [],
+      "experience": null,
+      "annees_experience": 9,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    },
+    {
+      "id": 46,
+      "nom_fichier": "DEV-2026-015_Inès_Benjelloun.pdf",
+      "nom_candidat": "Inès Benjelloun",
+      "poste": null,
+      "profil": null,
+      "competences": [],
+      "experience": null,
+      "annees_experience": 11,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    }
+  ]
+}

@@ -63,6 +63,8 @@ class CvUploadOut(BaseModel):
     resultats: list[CvResult]
 
 
+
+
 class CvDetail(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -70,11 +72,32 @@ class CvDetail(BaseModel):
     nom_fichier: str
     nb_pages: int
     statut: str
-    message: str | None
-    nom_candidat: str | None
-    poste: str | None
-    profil: str | None
-    competences: list[str]
-    experience_texte: str | None
-    annees_experience: int | None
-    niveau_etudes: str | None
+    message: str | None = None
+
+    # Personal information
+    nom_candidat: str | None = None
+    email: str | None = None
+    telephone: str | None = None
+
+    # Professional information
+    poste: str | None = None
+    profil: str | None = None
+    experience_texte: str | None = None
+    annees_experience: int | None = None
+
+    # Education
+    niveau_etudes: str | None = None
+    formations: list = Field(default_factory=list)
+
+    # Skills
+    competences: list[str] = Field(default_factory=list)
+    competences_transversales: list[str] = Field(default_factory=list)
+
+    # Gemini matching results
+    score: int | None = None
+    categorie: str | None = None
+    matching_skills: list[str] = Field(default_factory=list)
+    missing_skills: list[str] = Field(default_factory=list)
+    experience_match: bool | None = None
+    education_match: bool | None = None
+    justification: str | None = None

@@ -74,32 +74,66 @@ def _split_sections(text: str) -> dict[str, list[str]]:
 
 
 def _from_filename(filename: str) -> tuple[str | None, str | None]:
-    stem = Path(filename).stem.replace("_", " ")
-    stem = re.sub(r"^cv[\s\-–\d]*", "", stem, flags=re.I).strip()
-    m = re.match(r"^(?P<nom>[^()]+?)\s*(?:\((?P<poste>[^)]+)\))?$", stem)
-    if not m:
+    stem = Path(filename).stem
+
+    # Remove common CV reference prefixes
+    stem = re.sub(
+        r"^(?:CV|DEV)[-_ ]*\d{4}[-_ ]*\d+[-_ ]*",
+        "",
+        stem,
+        flags=re.I
+    )
+
+    # Replace underscores and separators with spaces
+    stem = re.sub(r"[_-]+", " ", stem).strip()
+
+    if not stem:
         return None, None
-    nom = m.group("nom").strip().title() or None
-    return nom, (m.group("poste") or "").strip() or None
 
-
+    return stem.title(), None
 NAME_RE = re.compile(r"^[A-Za-zÀ-ÿ'’.\- ]{3,50}$")
 
 
-def _name_and_poste(header: list[str], filename: str) -> tuple[str | None, str | None]:
-    nom = poste = None
-    for i, line in enumerate(header[:6]):
-        n = _norm(line)
-        if NAME_RE.match(line) and 2 <= len(line.split()) <= 4 and "curriculum" not in n and n != "cv":
-            nom = line.strip().title() if line.isupper() else line.strip()
-            for nxt in header[i + 1:i + 3]:
-                if "@" not in nxt and len(nxt) <= 80 and sum(c.isdigit() for c in nxt) < 4:
-                    poste = nxt.strip()
-                    break
-            break
-    f_nom, f_poste = _from_filename(filename)
-    return nom or f_nom, poste or f_poste
+def _name_and_poste(
+    header: list[str],
+    filename: str
+) -> tuple[str | None, str | None]:
 
+    nom = None
+    poste = None
+
+    for i, line in enumerate(header[:10]):
+        line = line.strip()
+        n = _norm(line)
+
+        if (
+            NAME_RE.match(line)
+            and 2 <= len(line.split()) <= 4
+            and "curriculum" not in n
+            and n != "cv"
+            and not re.search(r"\d", line)
+        ):
+            nom = line.title() if line.isupper() else line
+
+            # Look for the candidate's professional position
+            for nxt in header[i + 1:i + 4]:
+                nxt = nxt.strip()
+
+                if (
+                    nxt
+                    and "@" not in nxt
+                    and len(nxt) <= 100
+                    and not re.search(r"\d{5,}", nxt)
+                ):
+                    poste = nxt
+                    break
+
+            break
+
+    # Fallback to filename if the name was not found in the header
+    f_nom, f_poste = _from_filename(filename)
+
+    return nom or f_nom, poste or f_poste
 
 def _skills(lines: list[str]) -> list[str]:
     out, seen = [], set()
