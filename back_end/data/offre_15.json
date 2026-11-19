@@ -1,0 +1,104 @@
+{
+  "offre_id": 15,
+  "mis_a_jour": "2026-11-19T11:19:56.798004+00:00",
+  "total": 6,
+  "candidats": [
+    {
+      "id": 35,
+      "nom_fichier": "CV 1 - Youssef Bennani (Data Scientist).pdf",
+      "nom_candidat": "Youssef Bennani",
+      "poste": "Data Scientist & Machine Learning Engineer",
+      "profil": "Data Scientist expérimenté avec 3 ans d'expertise dans le traitement du langage naturel (NLP), la modélisation prédictive et la conception de solutions ML automatisées.",
+      "competences": [
+        "Python",
+        "SQL",
+        "Bash",
+        "Scikit-Learn",
+        "spaCy",
+        "NLTK",
+        "PyMuPDF",
+        "Pandas",
+        "NumPy",
+        "Streamlit",
+        "SQLite",
+        "Git",
+        "GitHub",
+        "Docker",
+        "Jira"
+      ],
+      "experience": "Data Scientist & Lead NLP\n2023 - Présent\nTech Solutions - Casablanca\nDéveloppement d'un pipeline d'extraction automatique avec PyMuPDF et spaCy.\nMise en place d'un algorithme de matching atteignant 92% de précision.",
+      "annees_experience": 3,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    },
+    {
+      "id": 36,
+      "nom_fichier": "CV 3 - Amine El Amrani (Chargé RH).pdf",
+      "nom_candidat": "Amine El Amrani",
+      "poste": "Chargé de Recrutement RH & Data Analyst Junior",
+      "profil": "Spécialiste du recrutement IT cherchant à optimiser la sélection des candidats à l'aide d'outils analytiques Python.",
+      "competences": [
+        "Sourcing",
+        "Entretiens",
+        "Tri de CV",
+        "Qualification",
+        "Jira",
+        "Trello",
+        "Python (Pandas)",
+        "Excel Avancé"
+      ],
+      "experience": "Chargé de Recrutement Senior\n2023 - Présent\nHuman Talent Group - Tanger\nGestion du suivi des candidatures IT sur Jira.\nAnalyse des taux de conversion candidats avec Pandas.",
+      "annees_experience": 3,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    },
+    {
+      "id": 37,
+      "nom_fichier": "DEV-2026-007_Sofia_Mansouri.pdf",
+      "nom_candidat": "Dev-2026-007 Sofia Mansouri",
+      "poste": null,
+      "profil": null,
+      "competences": [],
+      "experience": null,
+      "annees_experience": 10,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    },
+    {
+      "id": 38,
+      "nom_fichier": "DEV-2026-008_Karim_Berrada.pdf",
+      "nom_candidat": "Dev-2026-008 Karim Berrada",
+      "poste": null,
+      "profil": null,
+      "competences": [],
+      "experience": null,
+      "annees_experience": 9,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    },
+    {
+      "id": 39,
+      "nom_fichier": "DEV-2026-009_Nadia_Kabbaj.pdf",
+      "nom_candidat": "Dev-2026-009 Nadia Kabbaj",
+      "poste": null,
+      "profil": null,
+      "competences": [],
+      "experience": null,
+      "annees_experience": 11,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    },
+    {
+      "id": 40,
+      "nom_fichier": "DEV-2026-010_Lina_Guessous.pdf",
+      "nom_candidat": "Dev-2026-010 Lina Guessous",
+      "poste": null,
+      "profil": "github.com/lina-guessous Développeur Full Stack passionné et expérimenté avec 4 ans de pratique dans la conception,            ID Candidat: DEV-2026-010 l'architecture et la maintenance d'applications web complexes. Expert reconnu sur les technologies        Disponibilité: Immédiate Vue.js, NestJS et l'écosystème cloud (CI/CD (GitHub Actions)). Très orienté vers la qualité du code,       Mobilité: Nationale & Int. le respect des bonnes pratiques de sécurité, l'optimisation des performances de bases de données (Firebase Firestore) et le travail collaboratif en environnement Agile/Scrum.                 COMPÉTENCES Frontend EXPÉRIENCE PROFESSIONNELLE                                                                            • Vue.js, React.js, GraphQL Client, SolidJS Développeur Web Senior Senior — TechSolutions Maroc (2023 - Présent)                                                                               Backend • Architecture et développement d'APIs RESTful et GraphQL haute performance avec NestJS et           • NestJS, Node.js / Express, Spring Boot Firebase Firestore.                                                                 Bases de données • Conception d'interfaces utilisateurs dynamiques, accessibles et responsive sous Vue.js et                  • Firebase Firestore, PostgreSQL, MongoDB React.js.                                                                    DevOps & Cloud • Mise en place de pipelines CI/CD automatisés et conteneurisation des services via CI/CD (GitHub       • CI/CD (GitHub Actions), Terraform, Ansible Actions). • Encadrement technique de développeurs juniors et animation des revues de code            LANGUES hebdomadaires. • Arabe: Langue maternelle Ingénieur d'Études et Développement Web — Digital Pulse Studio (2021 - 2023)                              • Français: Langue maternelle • Développement de fonctionnalités métiers complexes en intégrant Node.js / Express avec la base        • Anglais: Intermédiaire (B2) de données PostgreSQL. QUALITÉS  • Optimisation des temps de chargement des pages web de 40% grâce à la refonte du frontend en GraphQL Client.                                                                                                                • Veille technologique & apprentissage • Rédaction des spécifications techniques et exécution des plans de tests unitaires et d'intégration.      continu • Esprit d'équipe & collaboration agileDéveloppeur Web & Mobile Junior — TechSolutions Maroc (2019 - 2021) • Gestion du temps & respect strict des • Participation au développement d'applications SaaS interactives avec SolidJS et Spring Boot.                                                                                                             délais • Maintenance préventive, résolution des bugs Niveaux 2 et 3 et support technique utilisateur.               • Excellente capacité d'adaptation",
+      "competences": [],
+      "experience": null,
+      "annees_experience": 10,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    }
+  ]
+}

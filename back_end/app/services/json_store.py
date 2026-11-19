@@ -5,6 +5,8 @@ from pathlib import Path
 
 from sqlalchemy.orm import Session
 
+from .cv_normalizer import clean_candidate_name
+
 from ..models import Cv
 
 DATA_DIR = Path("data")
@@ -27,7 +29,7 @@ def export_offre_json(db: Session, offre_id: int) -> Path:
             {
                 "id": c.id,
                 "nom_fichier": c.nom_fichier,
-                "nom_candidat": c.nom_candidat,
+                "nom_candidat": clean_candidate_name(c.nom_candidat),
                 "poste": c.poste,
                 "profil": c.profil,
                 "competences": c.competences,

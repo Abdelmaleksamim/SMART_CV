@@ -1,0 +1,56 @@
+{
+  "offre_id": 14,
+  "mis_a_jour": "2026-11-13T17:37:26.838702+00:00",
+  "total": 2,
+  "candidats": [
+    {
+      "id": 33,
+      "nom_fichier": "CV 1 - Youssef Bennani (Data Scientist).pdf",
+      "nom_candidat": "Youssef Bennani",
+      "poste": "Data Scientist & Machine Learning Engineer",
+      "profil": "Data Scientist expérimenté avec 3 ans d'expertise dans le traitement du langage naturel (NLP), la modélisation prédictive et la conception de solutions ML automatisées.",
+      "competences": [
+        "Python",
+        "SQL",
+        "Bash",
+        "Scikit-Learn",
+        "spaCy",
+        "NLTK",
+        "PyMuPDF",
+        "Pandas",
+        "NumPy",
+        "Streamlit",
+        "SQLite",
+        "Git",
+        "GitHub",
+        "Docker",
+        "Jira"
+      ],
+      "experience": "Data Scientist & Lead NLP\n2023 - Présent\nTech Solutions - Casablanca\nDéveloppement d'un pipeline d'extraction automatique avec PyMuPDF et spaCy.\nMise en place d'un algorithme de matching atteignant 92% de précision.",
+      "annees_experience": 3,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    },
+    {
+      "id": 34,
+      "nom_fichier": "CV 3 - Amine El Amrani (Chargé RH).pdf",
+      "nom_candidat": "Amine El Amrani",
+      "poste": "Chargé de Recrutement RH & Data Analyst Junior",
+      "profil": "Spécialiste du recrutement IT cherchant à optimiser la sélection des candidats à l'aide d'outils analytiques Python.",
+      "competences": [
+        "Sourcing",
+        "Entretiens",
+        "Tri de CV",
+        "Qualification",
+        "Jira",
+        "Trello",
+        "Python (Pandas)",
+        "Excel Avancé"
+      ],
+      "experience": "Chargé de Recrutement Senior\n2023 - Présent\nHuman Talent Group - Tanger\nGestion du suivi des candidatures IT sur Jira.\nAnalyse des taux de conversion candidats avec Pandas.",
+      "annees_experience": 3,
+      "niveau_etudes": "Bac +5",
+      "nb_pages": 1
+    }
+  ]
+}
